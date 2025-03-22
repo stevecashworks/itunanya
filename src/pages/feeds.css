@@ -1,0 +1,47 @@
+body {
+    background-color: #1c1c1c;
+    color: #ecf0f1;
+    font-family: Arial, sans-serif;
+  }
+  
+  .container {
+    max-width: 1200px;
+    margin: auto;
+  }
+  
+  h3 {
+    font-size: 1.5rem;
+  }
+  
+  h4 {
+    font-size: 1.2rem;
+    margin-bottom: 10px;
+  }
+  
+  .form-control {
+    border: 1px solid #2c3e50;
+  }
+  
+  .card {
+    border: none;
+    overflow: hidden;
+    transition: transform 0.3s ease-in-out;
+  }
+  
+  .card:hover {
+    transform: scale(1.05);
+  }
+  
+  .card img {
+    height: 180px;
+    object-fit: cover;
+  }
+  
+  .badge {
+    font-size: 0.75rem;
+  }
+  
+  button {
+    border-radius: 8px;
+  }
+  
