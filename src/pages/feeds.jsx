@@ -88,7 +88,7 @@ const VideoDashboard = () => {
     <Container fluid className="bg-dark text-light min-vh-100 d-flex">
       {/* Sidebar */}
 
-      <div className="bg-black p-3 d-flex flex-column align-items-center" style={{ width: "80px" }}>
+      <div className="bg-black p-3  flex-column align-items-center" style={{ width: "80px", display:"none" }}>
         <AiOutlineMenu size={24} className="mb-4" />
         <div className="d-flex flex-column gap-3">
           <Button variant="link" className="text-light p-0">
