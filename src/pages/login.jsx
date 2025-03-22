@@ -41,7 +41,7 @@ export default function LoginPage() {
           <Form>
             <Form.Group className="mb-3" controlId="formBasicEmail">
               <Form.Label>Email address</Form.Label>
-              <Form.Control onChange={(e)=>setEmail(e.target.value)} type="email" placeholder="Enter email" className="bg-dark text-light" />
+              <Form.Control onChange={(e)=>setEmail(e.target.value)} type="email" placeholder="Enter email" required={true} className="bg-dark text-light" />
             </Form.Group>
 
             <Form.Group className="mb-3" controlId="formBasicPassword">
@@ -51,7 +51,7 @@ export default function LoginPage() {
                   type={passwordVisible ? "text" : "password"}
                   placeholder="Enter password"
                   className="bg-dark text-light"
-                  required="true"
+                  required={true}
                   onChange={(e)=>{setPassword(e.target.value)}}
                 />
                 <Button

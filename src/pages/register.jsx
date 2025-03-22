@@ -131,7 +131,7 @@ const Register = () => {
                 </Button>
 
                 <div className="text-center">
-              <a href="/Login" style={{textDecoration:"none", display:"block", marginTop:"10px"}} className="text-light">Already have an account? Login</a>
+              <a href="/login" style={{textDecoration:"none", display:"block", marginTop:"10px"}} className="text-light">Already have an account? Login</a>
             </div>
               </Form>
             </Card.Body>
