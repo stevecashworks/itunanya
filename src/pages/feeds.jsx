@@ -10,6 +10,7 @@ import styled from "styled-components";
 import fetchData from "../fetchData.js";
 import { useContext } from "react";
 import { AppContext } from "../App.js";
+
 import NavbarComponent from "../components/navbar.jsx";
 const categories = ["Network", "Sports", "Educational", "Musician", "Deportes", "Gastronomy"];
 

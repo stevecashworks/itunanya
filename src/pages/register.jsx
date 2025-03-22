@@ -3,7 +3,7 @@ import { Form, Button, Container, Row, Col, Card, Alert } from "react-bootstrap"
 
 import {useNavigate} from "react-router-dom"
 
-export const apiEndPoint= "http://localhost:5000"
+export const apiEndPoint= "https://itunanya-backend.onrender.com"
 const Register = () => {
   const [formData, setFormData] = useState({
     name: "",

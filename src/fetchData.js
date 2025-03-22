@@ -1,4 +1,4 @@
-const apiEntry = "http://localhost:5000"
+const apiEntry = "https://itunanya-backend.onrender.com"
 const token= localStorage.getItem("itunaya_token")
 const fetchData=(endpoint, method, onSuccess, onFail, body={} )=>{
   console.log(method)

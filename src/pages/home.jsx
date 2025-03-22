@@ -21,35 +21,44 @@ const Home=()=>{
     const  {state, dispatch}= useContext(AppContext)
     
     useEffect(()=>{
-        if(!userDetailsAreFetched){
-            fetch(`${apiEndPoint}/users/loginwithtoken`,{
-
-                method:"POST",
-                headers:{
-                    "Content-Type":"application/json",
-                    token:localStorage.getItem("itunaya_token")
-                },
-                
+        const token=localStorage.getItem("itunaya_token")
+        if(token){
+            if(!userDetailsAreFetched){
+                fetch(`${apiEndPoint}/users/loginwithtoken`,{
     
-            })
-            .then(res=>res.json())
-            .then(data=>{
-                console.log(data)
-                if(!data.success){
-                    console.log(data)
-                }
-                else{
-                    localStorage.setItem("itunaya_id", data.result._id)
-                    localStorage.setItem("itunaya_username", data.result.name)
-                    dispatch({type:"setUserDetails", payload:data.result})
+                    method:"POST",
+                    headers:{
+                        "Content-Type":"application/json",
+                        token
+                    },
                     
-                    setUserDetailsAreFetched(true)
-                }
-            }).catch(err=>{
-                console.log(err.message)
-            });
         
+                })
+                .then(res=>res.json())
+                .then(data=>{
+                    console.log(data)
+                    if(!data.success){
+                        console.log(data)
+                    }
+                    else{
+                        localStorage.setItem("itunaya_id", data.result._id)
+                        localStorage.setItem("itunaya_username", data.result.name)
+                        dispatch({type:"setUserDetails", payload:data.result})
+                        
+                        setUserDetailsAreFetched(true)
+                    }
+                }).catch(err=>{
+                    console.log(err.message)
+                });
+            
+            }
+
         }
+        else{
+            console.log("token not found, redirecting to feeds")
+            navigate("/register")
+        }
+       
         
 
         if(!channelsAreFetched){
