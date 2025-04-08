@@ -7,9 +7,11 @@ import { AiOutlineMenu } from "react-icons/ai";
 import {useNavigate} from "react-router-dom"
 import { apiEndPoint } from "./register";
 import styled from "styled-components";
+import AccountModal from "../components/accountModal.jsx";
 import fetchData from "../fetchData.js";
 import { useContext } from "react";
 import { AppContext } from "../App.js";
+import "./feeds.css"
 
 import NavbarComponent from "../components/navbar.jsx";
 const categories = ["Network", "Sports", "Educational", "Musician", "Deportes", "Gastronomy"];
@@ -31,6 +33,10 @@ const Link=styled.a`
 const VideoDashboard = () => {
   const  navigate= useNavigate()
   const [ fetchedVideos, setFetchedVideos]= useState([])
+  const [modalClosed, setModalClosed]= useState(false)
+  const [action, setAction]= useState("register")
+  const [show, setShow]= useState(false)
+  const token=localStorage.getItem("itunaya_token")
   const {state}= useContext(AppContext)
   const {channels}= state
   const [query, setQuery]= useState("");
@@ -84,10 +90,11 @@ const VideoDashboard = () => {
     })
   },[])
   return (
-    <>
+    <div className="outerContainer">
       <NavbarComponent/>
-    <Container fluid className="bg-dark text-light min-vh-100 d-flex">
+    <Container onClick={()=>{if(!modalClosed){setShow(!token)}}} fluid className="bg-dark text-light min-vh-100 d-flex">
       {/* Sidebar */}
+      <AccountModal onHide={()=>{setModalClosed(true);setShow(false)}} setShow={setShow} setAction={setAction} action={action} show={show}/>
 
       <div className="bg-black p-3  flex-column align-items-center" style={{ width: "80px", display:"none" }}>
         <AiOutlineMenu size={24} className="mb-4" />
@@ -109,6 +116,7 @@ const VideoDashboard = () => {
         <Row className="mb-4  align-items-center">
           <Col md={3} className="text-start">
             <h3 className="fw-bold text-uppercase text-danger"><span className="text-light">ITUNANYA</span>.com</h3>
+         {/* <img style={{width:"80px"}} alt="logo" src={logo} /> */}
           </Col>
           <Col md={6}>
             <InputGroup>
@@ -118,7 +126,7 @@ const VideoDashboard = () => {
               </Button>
             </InputGroup>
           </Col>
-          <Col md={3} className="text-end">
+          <Col md={3} className="text-end butt">
             
 
             <Button variant="outline-light">
@@ -142,65 +150,26 @@ const VideoDashboard = () => {
         </Row>
 
         {/* Categories */}
-        <div className="mb-6 d-flex " style={{paddingRight:"100px", marginBottom:"40px"}}>
-          <Col xs={12}>
-
-            <div className="d-flex flex-wrap gap-1">
-                <Button variant="light">
-                <FaChevronLeft className="text-danger"/>
-                </Button>
-              {categories.map((cat, index) => (
-                <Button key={index} variant="dark" className="border-light px-4 py-2">
-                  {cat}
-                </Button>
-              ))}
-               <Button variant="light">
-                <FaChevronRight className="text-danger"/>
-                </Button>
-            </div>
-          </Col>
-
-        
-
-    <Col>
-    <Dropdown>
-      <Dropdown.Toggle variant="primary" id="dropdown-basic">
-        Channels
-      </Dropdown.Toggle>
-
-      <Dropdown.Menu>
-        {
-          
-          state.channels.map(channel=>{
-            return(
-              
-              <Dropdown.Item href={`#${channel.name}`}>{channel.name} <small> ( {channel.dial} )</small></Dropdown.Item>
-            )
-            
-          })
-        }
-        {/* <Dropdown.Item href="#/action-2">Channel 2</Dropdown.Item>
-        <Dropdown.Item href="#/action-3">Channel 3</Dropdown.Item>
-        <Dropdown.Item href="#/action-4">Channel 4</Dropdown.Item>
-        <Dropdown.Item href="#/action-4">Channel 4</Dropdown.Item>
-        <Dropdown.Item href="#/action-6">Channel 6</Dropdown.Item>
-        <Dropdown.Item href="#/action-7">Channel 7</Dropdown.Item>
-        <Dropdown.Item href="#/action-8">Channel 8</Dropdown.Item>
-        <Dropdown.Item href="#/action-9">Channel 9</Dropdown.Item>
-        <Dropdown.Item href="#/action-10">Channel 10</Dropdown.Item> */}
-        
-        
-      </Dropdown.Menu>
-    </Dropdown>
-    </Col>
-  
-
-        </div>
+        <div className="mb-4 d-flex cat">
+  <Button variant="light">
+    <FaChevronLeft className="text-danger button" />
+  </Button>
+  <div className="categories">
+    {categories.map((cat, index) => (
+      <Button key={index} variant="dark" className="border-light">
+        {cat}
+      </Button>
+    ))}
+  </div>
+  <Button variant="light button">
+    <FaChevronRight className="text-danger" />
+  </Button>
+</div>
 
         {/* Video Grid */}
         <Row >
           {(videos.length>0)?videos.map((video) => (
-            <Col as={Link} style={{textDecoration:"none"}} href={`/video/${video.shortCode}`} key={video.id} xs={12} sm={6} md={4} lg={3} className="mb-4">
+            <Col as={Link} onClick={((!token)&&(!modalClosed))?(e)=>{e.preventDefault()}:()=>{}} style={{textDecoration:"none"}} href={`/video/${video.shortCode}`} key={video.id} xs={12} sm={6} md={4} lg={3} className="mb-4">
               <StyledCard className="  text-white border-0">
                 <Card.Img variant="top" src={video.image} />
                 <Card.Body>
@@ -217,7 +186,7 @@ const VideoDashboard = () => {
         </Row>
       </Container>
     </Container>
-        </>
+        </div>
   );
 };
 

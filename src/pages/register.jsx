@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import { Form, Button, Container, Row, Col, Card, Alert } from "react-bootstrap";
-
+import logo from "../Assets/Logo---HD.png"
 import {useNavigate} from "react-router-dom"
 
-export const apiEndPoint= "https://itunanya-backend.onrender.com"
-const Register = () => {
+export const apiEndPoint= "http://localhost:5001"
+const Register = ({setAction}) => {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -69,7 +69,9 @@ const Register = () => {
         <Col md={{ span: 6, offset: 3 }}>
           <Card className="p-4 shadow-lg" style={{ backgroundColor: "#2c3e50", color: "#ecf0f1" }}>
             <Card.Body>
-              <h2 className="text-center text-danger mb-4">Itunanya</h2>
+              <div className="text-center text-danger mb-4">
+                <img style={{width:"90px"}} src={logo}></img>
+              </div>
               <h3 className="text-center mb-4">Register</h3>
               {error && <Alert variant="danger">{error}</Alert>}
               {success && <Alert variant="success">{success}</Alert>}
@@ -131,7 +133,7 @@ const Register = () => {
                 </Button>
 
                 <div className="text-center">
-              <a href="/login" style={{textDecoration:"none", display:"block", marginTop:"10px"}} className="text-light">Already have an account? Login</a>
+              <a href="#" onClick={()=>{setAction("login")}} style={{textDecoration:"none", display:"block", marginTop:"10px"}} className="text-light">Already have an account? Login</a>
             </div>
               </Form>
             </Card.Body>

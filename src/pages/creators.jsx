@@ -21,15 +21,15 @@ const Tag = styled.button`
   transition: background-color 0.3s ease-in-out;
   &:hover {
     background-color: #23272b;
-  }
-`;
+  }`
+;
 
 const Tags = styled.div`
   display: flex;
   flex-wrap: wrap;
   gap: 25px;
-  margin-bottom: 20px;
-`;
+  margin-bottom: 20px;`
+;
 
 const CreatorProfile = () => {
   const [uploads, setUploads] = useState([]);
@@ -63,74 +63,65 @@ const UploadUI = ({ upload, removeUpload }) => {
   const [description, setDescription] = useState("");
   const [tags, setTags] = useState([]);
   const [tagName, setTagName] = useState("");
-  const [progressThumbnail, setProgressThumbnail] = useState(0);
-  const [progressVideo, setProgressVideo] = useState(0);
-  const [thumbnailUrl, setThumbnailUrl] = useState("");
-  const [videoUrl, setVideoUrl] = useState("");
+  const [thumbnailFile, setThumbnailFile] = useState(null);
+  const [videoFile, setVideoFile] = useState(null);
+  const [progress, setProgress] = useState(0);
 
   const fileInputRefThumbnail = useRef(null);
   const fileInputRefVideo = useRef(null);
 
-  const uploadFile = async (field, file) => {
-    const formData = new FormData();
-    formData.append("file", file);
-    formData.append("upload_preset", CLOUDINARY_UPLOAD_PRESET);
-
-    try {
-      const response = await axios.post(CLOUDINARY_URL, formData, {
-        headers: { "Content-Type": "multipart/form-data" },
-        onUploadProgress: (progressEvent) => {
-          const percent = Math.round((progressEvent.loaded * 100) / progressEvent.total);
-          field === "thumbnail" ? setProgressThumbnail(percent) : setProgressVideo(percent);
-        },
-      });
-
-      const fileUrl = response.data.secure_url;
-      field === "thumbnail" ? setThumbnailUrl(fileUrl) : setVideoUrl(fileUrl);
-    } catch (error) {
-      console.error("Upload failed", error);
-      alert(`Upload failed: ${error.response?.data?.message || "Check Cloudinary settings."}`);
-    }
-  };
-
   const addTag = () => {
-    if (tagName) {
-      setTags((prevTags) => Array.from(new Set([...prevTags, tagName.toLowerCase()])));
+    if (tagName.trim()) {
+      setTags((prev) => [...new Set([...prev, tagName.toLowerCase()])]);
       setTagName("");
     }
   };
 
-  const removeTag = (tagName) => {
-    setTags((prevTags) => prevTags.filter((x) => x !== tagName));
+  const removeTag = (tag) => {
+    setTags((prev) => prev.filter((t) => t !== tag));
   };
 
-  const uploadVideo = () => {
-    fetch(`${apiEndPoint}/videos/create`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        token: localStorage.getItem("itunaya_token"),
-      },
-      body: JSON.stringify({
-        title,
-        description,
-        url: videoUrl,
-        thumbnail: thumbnailUrl,
-      }),
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.success) {
-          alert("Upload Successful");
-          window.location.reload();
-        } else {
-          alert(data.result);
-        }
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    if (!title || !description || !thumbnailFile || !videoFile || tags.length === 0) {
+      alert("Please fill all fields.");
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append("title", title);
+    formData.append("description", description);
+    formData.append("tags", JSON.stringify(tags));
+    formData.append("thumbnail", thumbnailFile);
+    formData.append("video", videoFile);
+
+    try {
+      const res = await axios.post(`${apiEndPoint}/videos/create`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          token: localStorage.getItem("itunaya_token"),
+        },
+        onUploadProgress: (e) => {
+          const percent = Math.round((e.loaded * 100) / e.total);
+          setProgress(percent);
+        },
       });
+
+      if (res.data.success) {
+        alert("Upload successful");
+        window.location.reload();
+      } else {
+        alert("Upload failed: " + res.data.result);
+      }
+    } catch (error) {
+      console.error(error);
+      alert("Upload error: " + error.message);
+    }
   };
 
   return (
-    <div className="p-3 border rounded bg-secondary text-light m-3">
+    <form onSubmit={handleSubmit} className="p-3 border rounded bg-secondary text-light m-3">
       <input
         type="text"
         className="form-control mb-2"
@@ -148,7 +139,6 @@ const UploadUI = ({ upload, removeUpload }) => {
       <Dropdown style={{ marginTop: "10px", marginBottom: "10px", float: "right" }}>
         <Dropdown.Toggle variant="primary">Channels</Dropdown.Toggle>
         <Dropdown.Menu>
-          {/* Replace with actual channels */}
           <Dropdown.Item href="#">Channel 1</Dropdown.Item>
           <Dropdown.Item href="#">Channel 2</Dropdown.Item>
         </Dropdown.Menu>
@@ -159,9 +149,8 @@ const UploadUI = ({ upload, removeUpload }) => {
         type="file"
         className="form-control mb-2"
         accept="image/*"
-        onChange={(e) => uploadFile("thumbnail", e.target.files[0])}
+        onChange={(e) => setThumbnailFile(e.target.files[0])}
       />
-      <ProgressBar now={progressThumbnail} animated className="mb-2" />
 
       <div style={{ display: "flex", gap: "10px" }}>
         <input
@@ -187,21 +176,20 @@ const UploadUI = ({ upload, removeUpload }) => {
         type="file"
         className="form-control mb-2"
         accept="video/*"
-        onChange={(e) => uploadFile("video", e.target.files[0])}
+        onChange={(e) => setVideoFile(e.target.files[0])}
       />
-      <ProgressBar now={progressVideo} animated className="mb-2" />
+      <ProgressBar now={progress} animated className="mb-2" />
 
       <Button variant="danger" onClick={() => removeUpload(upload.id)}>
         <FaTrash /> Delete
       </Button>
 
-      {title && description && thumbnailUrl && videoUrl && tags.length > 0 && (
-        <Button onClick={uploadVideo} variant="success" className="mt-2">
-          Save
-        </Button>
-      )}
-    </div>
+      <Button type="submit" variant="success" className="mt-2">
+        Save
+      </Button>
+    </form>
   );
 };
+
 
 export default CreatorProfile;

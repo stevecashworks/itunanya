@@ -1,47 +1,46 @@
-body {
-    background-color: #1c1c1c;
-    color: #ecf0f1;
-    font-family: Arial, sans-serif;
+.cat {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow-x: auto;
+  white-space: nowrap;
+  scrollbar-width: thin;
+  scrollbar-color: #ccc transparent;
+  padding: 10px 0;
+}
+
+.cat::-webkit-scrollbar {
+  height: 6px;
+}
+
+.cat::-webkit-scrollbar-thumb {
+  background: #ccc;
+  border-radius: 10px;
+}
+
+.categories {
+  display: flex;
+  gap: 10px;
+  flex-wrap: nowrap;
+}
+
+.categories button {
+  flex-shrink: 0;
+  white-space: nowrap;
+  padding: 10px 15px;
+  font-size: 14px;
+}
+
+@media (max-width: 768px) {
+  .categories {
+    width: 90vw;
+    justify-content: center;
   }
-  
-  .container {
-    max-width: 1200px;
-    margin: auto;
+  .butt{
+    display: block;
+    margin-top:20px;
   }
-  
-  h3 {
-    font-size: 1.5rem;
+  .button{
+    display: none;
   }
-  
-  h4 {
-    font-size: 1.2rem;
-    margin-bottom: 10px;
-  }
-  
-  .form-control {
-    border: 1px solid #2c3e50;
-  }
-  
-  .card {
-    border: none;
-    overflow: hidden;
-    transition: transform 0.3s ease-in-out;
-  }
-  
-  .card:hover {
-    transform: scale(1.05);
-  }
-  
-  .card img {
-    height: 180px;
-    object-fit: cover;
-  }
-  
-  .badge {
-    font-size: 0.75rem;
-  }
-  
-  button {
-    border-radius: 8px;
-  }
-  
+}

@@ -4,7 +4,7 @@ import { Eye, EyeSlash } from "react-bootstrap-icons";
 import fetchData from "../fetchData";
 import { useNavigate } from "react-router-dom";
 
-export default function LoginPage() {
+export default function LoginPage({setAction}) {
     const  navigate= useNavigate()
     const [passwordVisible, setPasswordVisible] = useState(false);
   const  [email, setEmail]= useState("")                                                                                         
@@ -67,7 +67,7 @@ export default function LoginPage() {
               Login
             </Button>
             <div className="text-center">
-              <a href="/register" style={{textDecoration:"none", display:"block", marginTop:"10px"}} className="text-light">Don't have an account? Register</a>
+              <a href="#" onClick={()=>{setAction("register")}} style={{textDecoration:"none", display:"block", marginTop:"10px"}} className="text-light">Don't have an account? Register</a>
             </div>
           </Form>
         </Card.Body>

@@ -56,7 +56,7 @@ const Home=()=>{
         }
         else{
             console.log("token not found, redirecting to feeds")
-            navigate("/register")
+            navigate("/feeds")
         }
        
         
